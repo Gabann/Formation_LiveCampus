@@ -3,7 +3,31 @@
 const price_to_pay = 3348;
 const customer_payment = 5000;
 
-$cash_register_money = array(
+$DB_URL = getenv("db_url");
+$DB_PORT = getenv("db_port");
+$DB_USERNAME = getenv("db_username");
+$DB_PASSWORD = getenv("db_password");
+
+var_dump($DB_USERNAME);
+
+
+try {
+	$options = [PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC];
+	$pdo = new PDO("mysql:host=localhost:3306;dbname=cash;charset=utf8mb4", $DB_USERNAME, $DB_PASSWORD, $options);
+	$request = "SELECT * from cash_register";
+	$stmt = $pdo->prepare($request);
+	$stmt->execute();
+	$results = $stmt->fetchAll();
+	if ($results) {
+//		var_dump($results);
+	} else {
+		echo 'fraud !';
+	}
+} catch (PDOException $pdoE) {
+	var_dump($pdoE);
+}
+
+$cash_register = array(
 		array('value' => 50000, 'amount' => 1, 'image' => "https://argus2euros.fr/wp-content/uploads/2025/04/Billet-de-500-euros-v1-avant.jpg"),
 		array('value' => 20000, 'amount' => 2, 'image' => "https://argus2euros.fr/wp-content/uploads/2025/04/Billet-de-200-euros-v1-avant.jpg"),
 		array('value' => 10000, 'amount' => 2, 'image' => "https://argus2euros.fr/wp-content/uploads/2025/04/Billet-de-100-euros-v1-avant.jpg"),
@@ -21,8 +45,8 @@ $cash_register_money = array(
 		array('value' => 1, 'amount' => 12, 'image' => "https://www.ecb.europa.eu/euro/coins/common/shared/img/common_1cent_800.jpg"),
 );
 
-if ($_POST["1"] !== null) {
-	foreach ($cash_register_money as $currency) {
+if (!empty($_POST["1"])) {
+	foreach ($cash_register as $currency) {
 		$new_value = $_POST[$currency["value"]];
 
 		$currency["amount"] = $new_value;
@@ -63,9 +87,9 @@ function part_3($cash_register_money)
 		give_change($cash_register_money, $i, $change_amount);
 	}
 
-	if ($change_amount > 0) {
-
-	}
+//	if ($change_amount > 0) {
+//
+//	}
 }
 
 function give_change(&$cash_register_money, $currencyIndex, &$changeAmount)
@@ -86,7 +110,7 @@ function give_change(&$cash_register_money, $currencyIndex, &$changeAmount)
 }
 
 
-part_1($cash_register_money);
+part_1($cash_register);
 //part_2($cash_register_money, 10);
 //part_3($cash_register_money);
 ?>
@@ -117,7 +141,7 @@ part_1($cash_register_money);
 						</thead>
 						<tbody>
 							<?php
-							foreach ($cash_register_money as $currency) {
+							foreach ($cash_register as $currency) {
 								$currency_image = $currency["image"];
 								$currency_amount = $currency["amount"];
 								$currency_value = $currency["value"];
