@@ -1,7 +1,9 @@
 <?php
 
-namespace Gaban\Php\Exercices\classes;
+namespace Gaban\Php\Exercices\classes\currency;
 
+
+use Gaban\Php\Exercices\classes\builder\CurrencyBuilder;
 
 abstract class currency
 {

@@ -2,8 +2,16 @@
 
 namespace Gaban\Php\Exercices\classes;
 
-use Gaban\Php\Exercices\DTO\currency_amount;
+use Gaban\Php\Exercices\classes\builder\BillBuilder;
+use Gaban\Php\Exercices\classes\builder\CoinBuilder;
+use Gaban\Php\Exercices\classes\currency\bill;
+use Gaban\Php\Exercices\classes\currency\coin;
+use Gaban\Php\Exercices\classes\currency\currency;
+use Gaban\Php\Exercices\classes\DTO\currency_amount;
+use Gaban\Php\Exercices\classes\invoice\Iinvoice;
+use Gaban\Php\Exercices\classes\utils\DB_connection;
 
+//TODO create a payment system for single responsability principle, cash register should only have to handle the cash stock
 class cash_register
 {
 	/** @var currency_amount[] */
@@ -65,11 +73,6 @@ JOIN currency_type ct on cu.currency_type = ct.id
 		return $this->currencies_amount_dto;
 	}
 
-	public function set_currencies_amount_dto(array $currencies_amount_dto): void
-	{
-		$this->currencies_amount_dto = $currencies_amount_dto;
-	}
-
 	public function give_change_preferred_currency($changeAmount, $preferred_currency): void
 	{
 		$this->giveCurrency($preferred_currency, $changeAmount);
@@ -97,7 +100,7 @@ JOIN currency_type ct on cu.currency_type = ct.id
 			echo "---------------------------\n";
 		}
 
-		$this->saveCashRegisterStatus();
+		$this->saveCashRegisterStatusToDB();
 	}
 
 	public function get_currency_amount(currency $currency): int
@@ -120,7 +123,7 @@ JOIN currency_type ct on cu.currency_type = ct.id
 		}
 	}
 
-	public function saveCashRegisterStatus(): void
+	public function saveCashRegisterStatusToDB(): void
 	{
 		$request_when = "";
 		$request_in = "";
@@ -149,6 +152,11 @@ JOIN currency_type ct on cu.currency_type = ct.id
 		foreach ($this->currencies_amount_dto as $currency_amount_dto) {
 			$this->giveCurrency($currency_amount_dto->get_currency(), $changeAmount);
 		}
+	}
+
+	public function send_invoice(Iinvoice $invoice): string
+	{
+		return $invoice->print();
 	}
 
 	public function set_currency_amount_by_id(int $currency_id, $amount): void

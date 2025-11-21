@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_cashier_amount
 		$cash_register->set_currency_amount_by_id($currency["id"], $currency["amount"]);
 	}
 
-	$cash_register->saveCashRegisterStatus();
+	$cash_register->saveCashRegisterStatusToDB();
 }
 
 ?>

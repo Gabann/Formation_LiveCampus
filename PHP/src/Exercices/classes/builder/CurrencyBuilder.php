@@ -1,6 +1,6 @@
 <?php
 
-namespace Gaban\Php\Exercices\classes;
+namespace Gaban\Php\Exercices\classes\builder;
 
 class CurrencyBuilder
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Gaban\Php\Exercices\DTO;
+namespace Gaban\Php\Exercices\classes\DTO;
 
-use Gaban\Php\Exercices\classes\currency;
+use Gaban\Php\Exercices\classes\currency\currency;
 
 class currency_amount
 {

@@ -1,7 +1,10 @@
 <?php
 
-namespace Gaban\Php\Exercices\classes;
+namespace Gaban\Php\Exercices\classes\currency;
 
+
+use Gaban\Php\Exercices\classes\builder\BillBuilder;
+use Gaban\Php\Exercices\classes\builder\CurrencyBuilder;
 
 class bill extends currency
 {

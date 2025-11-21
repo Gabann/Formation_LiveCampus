@@ -1,6 +1,6 @@
 <?php
 
-use Gaban\Php\Exercices\classes\DB_connection;
+use Gaban\Php\Exercices\classes\utils\DB_connection;
 
 require_once '../../../vendor/autoload.php';
 
@@ -17,6 +17,7 @@ function try_login(): bool
 
 	$results = DB_connection::get_instance()::make_query("SELECT id, email, role FROM users WHERE email= :email  AND password= :password",
 		['email' => $username, 'password' => $password]);
+
 	if ($results) {
 		$_SESSION['connected'] = true;
 		header("Location:index.php");

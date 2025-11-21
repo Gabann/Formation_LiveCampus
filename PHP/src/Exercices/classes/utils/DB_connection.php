@@ -1,6 +1,6 @@
 <?php
 
-namespace Gaban\Php\Exercices\classes;
+namespace Gaban\Php\Exercices\classes\utils;
 
 use PDO;
 use PDOException;
@@ -30,7 +30,7 @@ class DB_connection
 		return self::$instance;
 	}
 
-	public static function make_query($request, $params = [])
+	public static function make_query($request, $params = []): ?array
 	{
 		try {
 			$stmt = self::$instance->pdo->prepare($request);

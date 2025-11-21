@@ -1,6 +1,8 @@
 <?php
 
-namespace Gaban\Php\Exercices\classes;
+namespace Gaban\Php\Exercices\classes\builder;
+
+use Gaban\Php\Exercices\classes\currency\coin;
 
 class CoinBuilder extends CurrencyBuilder
 {
