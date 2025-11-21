@@ -46,13 +46,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_cashier_amount
 						<div class="form-group col-6 justify-content-center">
 							<label for="price_to_pay">Price to pay</label>
 							<input type="number" class="form-control" id="price_to_pay" name="price_to_pay" placeholder="Price to pay"
-							       value="3348">
+							       value="3348"/>
 						</div>
 
 						<div class="form-group col-6 justify-content-center">
 							<label for="customer_payment">Customer payment</label>
 							<input type="text" class="form-control" id="customer_payment" name="customer_payment"
-							       placeholder="Customer payment" value="5000">
+							       placeholder="Customer payment" value="5000"/>
 						</div>
 
 						<!-- Center the button: full-width column with flex centering -->
@@ -81,13 +81,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_cashier_amount
 
 
 								echo("<tr>");
-								echo("<th scope=\"row\"><img src='$currency_image' alt='monnie de $currency_amount' /></th>");
+								echo("<th scope=\"row\"><img src='$currency_image' alt='monnie de $currency_amount'></th>");
 								echo("<th scope=\"row\"><span>$currency_value_in_euros</span></th>");
 								echo("<td>
-  <input type=\"hidden\" name=\"currencies[{$currency_amount_dto->get_currency()->getId()}][id]\" value=\"{$currency_amount_dto->get_currency()->getId()}\" />
-  <input type=\"number\" value=\"$currency_amount\" name=\"currencies[{$currency_amount_dto->get_currency()->getId()}][amount]\" min='0' />
-</td>");
-								echo("/<tr>");
+	  <input type=\"hidden\" name=\"currencies[{$currency_amount_dto->get_currency()->getId()}][id]\" value=\"{$currency_amount_dto->get_currency()->getId()}\" />
+	  <input type=\"number\" value=\"$currency_amount\" name=\"currencies[{$currency_amount_dto->get_currency()->getId()}][amount]\" min='0' />
+	</td>");
+								echo("<tr>");
 							}
 							?>
 						</tbody>
