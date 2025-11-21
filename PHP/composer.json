@@ -1,4 +1,17 @@
 {
+  "name": "gaban/php",
+  "license": "MIT",
+  "autoload": {
+	"psr-4": {
+	  "Gaban\\Php\\": "src/"
+	}
+  },
+  "authors": [
+	{
+	  "name": "Gaban",
+	  "email": "gabin.deboulogne@gmail.com"
+	}
+  ],
   "require": {
 	"ext-pdo": "*"
   }
