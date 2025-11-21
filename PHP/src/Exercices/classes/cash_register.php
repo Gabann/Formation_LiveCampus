@@ -9,9 +9,55 @@ class cash_register
 	/** @var currency_amount[] */
 	private array $currencies_amount_dto = array();
 
-	public function __construct(array $currencies)
+	public function __construct()
 	{
+		$currencies = $this->fetchCurrencies();
+
 		$this->currencies_amount_dto = $currencies;
+
+		$this->sort_currency_by_value_desc();
+	}
+
+	private function fetchCurrencies(): array
+	{
+		$results = DB_connection::get_instance()::make_query("SELECT ca.amount, cu.image_url, cu.value, ct.name as currency_type, cu.id
+FROM cash_register ca
+JOIN currencies cu ON ca.currency_id = cu.id
+JOIN currency_type ct on cu.currency_type = ct.id
+");
+		$currencies = array();
+
+		if ($results) {
+			//TODO: refactor this to take into account any currency type and remove redundancy
+			foreach ($results as $row) {
+				switch ($row['currency_type']) {
+					case 'bill':
+						$bill = new bill((new BillBuilder())
+							->id((int)$row['id'])
+							->value((int)$row['value'])
+							->imgUrl($row['image_url']));
+						$currency_amount = new currency_amount($bill, ($row['amount']));
+						array_push($currencies, $currency_amount);
+						break;
+					case 'coin':
+						$coin = new coin((new CoinBuilder())
+							->id((int)$row['id'])
+							->value((int)$row['value'])
+							->imgUrl($row['image_url']));
+						$currency_amount = new currency_amount($coin, ($row['amount']));
+						array_push($currencies, $currency_amount);
+						break;
+				}
+			}
+		}
+		return $currencies;
+	}
+
+	public function sort_currency_by_value_desc(): void
+	{
+		usort($this->currencies_amount_dto, function ($a, $b) {
+			return $b->get_currency()->get_value() <=> $a->get_currency()->get_value();
+		});
 	}
 
 	public function get_currencies_amount_dto(): array
@@ -103,13 +149,6 @@ class cash_register
 		foreach ($this->currencies_amount_dto as $currency_amount_dto) {
 			$this->giveCurrency($currency_amount_dto->get_currency(), $changeAmount);
 		}
-	}
-
-	public function sort_currency_by_value_desc(): void
-	{
-		usort($this->currencies_amount_dto, function ($a, $b) {
-			return $b->get_currency()->get_value() <=> $a->get_currency()->get_value();
-		});
 	}
 
 	public function set_currency_amount_by_id(int $currency_id, $amount): void

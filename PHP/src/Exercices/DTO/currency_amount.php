@@ -29,6 +29,4 @@ class currency_amount
 	{
 		$this->amount = $amount;
 	}
-
-
 }

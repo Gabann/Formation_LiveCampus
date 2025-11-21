@@ -10,15 +10,13 @@ abstract class currency
 	protected int $id;
 
 	/**
-	 * @param int $value
-	 * @param string $img_url
-	 * @param int $id
+	 * @param CurrencyBuilder $currencyBuilder
 	 */
-	public function __construct(int $value, string $img_url, int $id)
+	public function __construct(CurrencyBuilder $currencyBuilder)
 	{
-		$this->value = $value;
-		$this->img_url = $img_url;
-		$this->id = $id;
+		$this->value = $currencyBuilder->getValue();
+		$this->img_url = $currencyBuilder->getImgUrl();
+		$this->id = $currencyBuilder->getId();
 	}
 
 	public function getId(): int
@@ -45,4 +43,6 @@ abstract class currency
 	{
 		$this->img_url = $img_url;
 	}
+
+	public abstract function build(): currency;
 }

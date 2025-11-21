@@ -1,47 +1,10 @@
 <?php
 
-use Gaban\Php\Exercices\classes\bill;
 use Gaban\Php\Exercices\classes\cash_register;
-use Gaban\Php\Exercices\classes\coin;
-use Gaban\Php\Exercices\classes\DB_connection;
-use Gaban\Php\Exercices\DTO\currency_amount;
 
 require_once '../../../vendor/autoload.php';
 
-$cash_register = null;
-
-function fetch_currencies(): void
-{
-	$results = DB_connection::get_instance()::make_query("SELECT ca.amount, cu.image_url, cu.value, ct.name as currency_type, cu.id
-FROM cash_register ca
-JOIN currencies cu ON ca.currency_id = cu.id
-JOIN currency_type ct on cu.currency_type = ct.id
-");
-
-	if ($results) {
-		global $cash_register;
-		$currencies = array();
-
-		//TODO: refactor this to take into account any currency type and remove redundancy
-		foreach ($results as $row) {
-			switch ($row['currency_type']) {
-				case 'bill':
-					$bill = new bill($row['value'], $row['image_url'], $row['id']);
-					$currency_amount = new currency_amount($bill, ($row['amount']));
-					array_push($currencies, $currency_amount);
-					break;
-				case 'coin':
-					$coin = new coin($row['value'], $row['image_url'], $row['id']);
-					$currency_amount = new currency_amount($coin, ($row['amount']));
-					array_push($currencies, $currency_amount);
-					break;
-			}
-		}
-		$cash_register = new cash_register($currencies);
-	}
-}
-
-fetch_currencies();
+$cash_register = new cash_register();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['calculate_payment'])) {
 	$price = $_POST['price_to_pay'];
@@ -111,7 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_cashier_amount
 						<tbody>
 							<?php
 							foreach ($cash_register->get_currencies_amount_dto() as $currency_amount_dto) {
-								$currency_amount_dto->get_currency()->get_value();
 								$currency_image = $currency_amount_dto->get_currency()->get_img_url();
 								$currency_amount = $currency_amount_dto->get_amount();
 								$currency_value = $currency_amount_dto->get_currency()->get_value();
